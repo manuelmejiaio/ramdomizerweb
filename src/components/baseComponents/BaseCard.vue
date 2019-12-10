@@ -1,6 +1,6 @@
 <template>
   <v-card class="base-card" v-bind="$attrs" v-on="$listeners">
-    <div v-if="title" class="secondary white--text text-md-left">
+    <div v-if="title" class="secondary white--text">
       <BaseText class="display-1 px-4 py-2">{{ title }}</BaseText>
     </div>
     <slot />

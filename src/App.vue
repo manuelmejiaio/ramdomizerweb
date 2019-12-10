@@ -1,10 +1,10 @@
 <template>
   <v-app id="app">
-    <v-content>
-      <component :is="layout">
+    <component :is="layout">
+      <v-content class="app-content">
         <router-view />
-      </component>
-    </v-content>
+      </v-content>
+    </component>
   </v-app>
 </template>
 
@@ -27,5 +27,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+.app-content {
+  min-height: 975px;
 }
 </style>
