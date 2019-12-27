@@ -1,5 +1,13 @@
 <template>
-  <BaseButton v-google-signin-button="clientId" color="red" dark block large class="google-login-button">
+  <BaseButton
+    v-google-signin-button="clientId"
+    :loading="loading"
+    color="red"
+    dark
+    block
+    large
+    class="google-login-button"
+  >
     <BaseIcon large class="mr-2" name="google" /> Continue with Google
   </BaseButton>
 </template>
@@ -14,27 +22,34 @@ export default {
   directives: {
     GoogleSignInButton
   },
-  data: () => ({
-    circularProgress: false,
-    clientId: '972296239509-jk08l4kpejq72tf9estt2bmrphenua3v.apps.googleusercontent.com'
-  }),
+  data() {
+    return {
+      loading: false,
+      clientId: '972296239509-jk08l4kpejq72tf9estt2bmrphenua3v.apps.googleusercontent.com'
+    }
+  },
   methods: {
     OnGoogleAuthSuccess(idToken) {
-      this.circularProgress = true
+      this.loading = true
       axios
-        .post(`${process.env.HOST_URL}/api/v1.0/accounts/googlesignin`, { IdToken: idToken }, { withCredentials: true })
+        .post(
+          `${process.env.VUE_APP_API_BASE_URL}/api/v1.0/accounts/googlesignin`,
+          { IdToken: idToken },
+          { withCredentials: true }
+        )
         .then(response => {
-          // const user = {
-          //   userId: response.data.userId,
-          //   name: response.data.name,
-          //   userEmail: response.data.email,
-          //   token: response.data.token,
-          //   plan: response.data.plan
-          // }
-          // redirect user if everything works
+          const user = {
+            userId: response.data.userId,
+            name: response.data.name,
+            userEmail: response.data.email,
+            token: response.data.token,
+            plan: response.data.plan
+          }
+          this.$store.commit('Login', user)
+          this.$router.push('/giveaway-list')
         })
         .catch(error => {
-          this.circularProgress = false
+          this.loading = false
           let serverErrorArray = []
           for (var key in error.response.data.errors) {
             serverErrorArray.push(error.response.data.errors[key])

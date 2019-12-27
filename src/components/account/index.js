@@ -1,1 +1,6 @@
-export { default as AccountLoginInfo } from './AccountLoginInfo.vue'
+export { default as AccountLoginForm } from './AccountLoginForm.vue'
+export { default as AccountSignupForm } from './AccountSignupForm.vue'
+export { default as AccountForgotPasswordForm } from './AccountForgotPasswordForm.vue'
+export { default as AccountForgotPasswordEmailSentInfo } from './AccountForgotPasswordEmailSentInfo.vue'
+export { default as AccountResetPasswordForm } from './AccountResetPasswordForm.vue'
+export { default as AccountChangedPasswordInfo } from './AccountChangedPasswordInfo.vue'

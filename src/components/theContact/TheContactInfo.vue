@@ -14,8 +14,7 @@
                 <iframe
                   class="contact-iframe"
                   src="https://app.purechat.com/w/RAMdomizer"
-                  gesture="media"
-                  allow="encrypted-media"
+                  allow="autoplay"
                   allowfullscreen
                 ></iframe>
               </v-col>

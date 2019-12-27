@@ -21,7 +21,7 @@
         </v-row>
         <v-row>
           <v-col cols="12">
-            <BaseButton class="display-1 elevation-16" rounded x-large color="success" to="/signup">
+            <BaseButton class="display-1 elevation-16" rounded x-large color="success" to="/account-signup">
               Get Started Free
             </BaseButton>
           </v-col>
