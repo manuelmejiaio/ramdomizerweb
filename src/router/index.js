@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 
 const routes = [
   { path: '/', name: 'TheHome', component: () => import('@/views/TheHome.vue') },
-  { path: '/account-change-password', name: 'AccountChangePassword', component: () => import('@/views/TheHome.vue') },
+  { path: '/account-change-password', name: 'AccountChangePassword', component: () => import('@/views/AccountChangePassword.vue') },
   { path: '/account-change-password-confirmation',  name: 'AccountChangePasswordConfirmation', component: () => import('@/views/AccountChangePasswordConfirmation.vue') },
   { path: '/account-confirmed', name: 'AccountConfirmed', component: () => import('@/views/AccountConfirmed.vue') },
   { path: '/account-delete', name: 'AccountDelete', component: () => import('@/views/AccountDelete.vue') },

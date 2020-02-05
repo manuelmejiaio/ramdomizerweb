@@ -5,7 +5,7 @@
     color="red"
     dark
     block
-    large
+    x-large
     class="google-login-button"
   >
     <BaseIcon large class="mr-2" name="google" /> Continue with Google

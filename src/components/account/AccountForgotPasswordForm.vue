@@ -16,7 +16,7 @@
           <v-container fluid>
             <v-row no-gutters align="start" justify="center">
               <v-col cols="12">
-                <BaseText v-for="error in serverErrors" :key="error" class="caption">{{ error }}</BaseText>
+                <BaseText v-for="error in serverErrors" :key="error" class="caption error--text">{{ error }}</BaseText>
               </v-col>
             </v-row>
             <v-row>
@@ -28,7 +28,7 @@
                     :error-messages="emailErrors"
                     @blur="$v.email.$touch()"
                   />
-                  <BaseButton block color="success" :loading="loading" @click="sendLink">
+                  <BaseButton block x-large color="success" :loading="loading" @click="sendLink">
                     Send Link
                   </BaseButton>
                 </BaseForm>

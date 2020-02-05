@@ -3,13 +3,14 @@
     <TheHeader />
     <slot />
     <TheFooter />
+    <TheSnackbar />
   </div>
 </template>
 
 <script>
-import { TheHeader, TheFooter } from '../components/sharedComponents'
+import { TheHeader, TheFooter, TheSnackbar } from '../components/sharedComponents'
 export default {
-  components: { TheHeader, TheFooter }
+  components: { TheHeader, TheFooter, TheSnackbar }
 }
 </script>
 

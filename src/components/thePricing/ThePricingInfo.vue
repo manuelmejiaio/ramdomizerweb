@@ -18,7 +18,7 @@
               <v-col cols="12">
                 <BaseText class="display-1">$0.00</BaseText>
                 <BaseText class="subtitle-1 mb-5">Free forever</BaseText>
-                <BaseButton class="mb-5" color="success" block to="/signup">Select Plan</BaseButton>
+                <BaseButton class="mb-5" color="success" block x-large to="/signup">Select Plan</BaseButton>
                 <BaseText v-for="feature in features" :key="feature.description" class="subtitle-1 text-md-left pa-1">
                   - {{ feature.description }}
                 </BaseText>

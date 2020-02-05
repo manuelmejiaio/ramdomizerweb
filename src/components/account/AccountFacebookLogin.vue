@@ -5,7 +5,7 @@
     color="blue darken-3"
     dark
     block
-    large
+    x-large
     class="facebook-login-button"
   >
     <BaseIcon large class="mr-2" name="facebook" /> Continue with Google

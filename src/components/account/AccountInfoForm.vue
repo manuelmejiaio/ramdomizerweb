@@ -2,7 +2,7 @@
   <v-container fluid class="white--text">
     <v-row>
       <v-col cols="12">
-        <BaseText class="display-2">Login</BaseText>
+        <BaseText class="display-2">Account</BaseText>
       </v-col>
     </v-row>
     <v-row align="center" justify="center">
@@ -14,32 +14,24 @@
                 <BaseText v-for="error in serverErrors" :key="error" class="caption error--text">{{ error }}</BaseText>
               </v-col>
             </v-row>
-            <v-row no-gutters align="start" justify="center">
-              <v-col cols="12">
-                <AccountSocialLogin />
-              </v-col>
-            </v-row>
             <v-row no-gutters>
               <v-col cols="12">
                 <BaseForm>
+                  <BaseTextField v-model="name" label="Name" :error-messages="nameErrors" @blur="$v.name.$touch()" />
                   <BaseTextField
                     v-model="email"
                     label="Email"
                     :error-messages="emailErrors"
                     @blur="$v.email.$touch()"
                   />
-                  <BaseTextField
-                    v-model="password"
-                    type="password"
-                    label="Password"
-                    :error-messages="passwordErrors"
-                    @blur="$v.password.$touch()"
-                  />
-                  <BaseButton class="mb-5" block x-large color="success" :loading="loading" @click="logIn"
-                    >Log In</BaseButton
-                  >
-                  <BaseButton class="float-left" text small to="/account-forgot-password">
-                    Forgot your Password?
+                  <BaseButton class="mb-5" block x-large color="success" :loading="loading" @click="saveAccount">
+                    Save
+                  </BaseButton>
+                  <BaseButton class="float-left" text small to="/account-change-password">
+                    Change Password
+                  </BaseButton>
+                  <BaseButton class="float-right" text small to="/account-delete">
+                    Delete Account
                   </BaseButton>
                 </BaseForm>
               </v-col>
@@ -53,66 +45,64 @@
 
 <script>
 import { BaseCard, BaseText, BaseForm, BaseTextField, BaseButton } from '../baseComponents'
-import AccountSocialLogin from './AccountSocialLogin'
 import { validationMixin } from 'vuelidate'
 import { required, email } from 'vuelidate/lib/validators'
 import axios from 'axios'
+import { authHeader } from '../../helpers/authHeader'
 export default {
   name: 'AccountLoginForm',
-  components: { BaseCard, BaseText, BaseForm, BaseTextField, BaseButton, AccountSocialLogin },
+  components: { BaseCard, BaseText, BaseForm, BaseTextField, BaseButton },
   mixins: [validationMixin],
   validations: {
-    email: { required, email },
-    password: { required }
+    name: { required },
+    email: { required, email }
   },
   data() {
     return {
-      email: '',
-      password: '',
+      name: this.$store.state.user.name,
+      email: this.$store.state.user.email,
       loading: false,
       serverErrors: ''
     }
   },
   computed: {
+    nameErrors() {
+      const errors = []
+      if (!this.$v.name.$dirty) return errors
+      !this.$v.name.required && errors.push('Name is required')
+      return errors
+    },
     emailErrors() {
       const errors = []
       if (!this.$v.email.$dirty) return errors
       !this.$v.email.email && errors.push('Must be valid e-mail')
       !this.$v.email.required && errors.push('E-mail is required')
       return errors
-    },
-    passwordErrors() {
-      const errors = []
-      if (!this.$v.password.$dirty) return errors
-      !this.$v.password.required && errors.push('Password is required')
-      return errors
     }
   },
   methods: {
-    logIn() {
+    saveAccount() {
       this.$v.$touch()
       if (!this.$v.$invalid) {
         this.loading = true
         axios
-          .post(
-            `${process.env.VUE_APP_API_BASE_URL}/api/v1.0/accounts/login`,
+          .put(
+            `${process.env.VUE_APP_API_BASE_URL}/api/v1.0/accounts/update`,
             {
-              Email: this.email,
-              Password: this.password,
-              RememberMe: true
+              Name: this.name,
+              Email: this.email
             },
-            { withCredentials: true }
+            authHeader(this.$store.state.user.token)
           )
           .then(response => {
-            const user = {
-              userId: response.data.userId,
-              name: response.data.name,
-              userEmail: this.email,
-              token: response.data.token,
-              plan: response.data.plan
+            if (response.data.isEmailChanged) {
+              this.$store.commit('Logout')
+              this.$router.push('/account-unverified')
+            } else {
+              this.loading = false
+              this.$store.commit('Update', { name: this.name })
+              this.$store.commit('SetSnack', 'Account saved')
             }
-            this.$store.commit('Login', user)
-            this.$router.push('/giveaway-list')
           })
           .catch(error => {
             this.loading = false

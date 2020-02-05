@@ -41,6 +41,7 @@
 
 <script>
 import { BaseButton, BaseIcon, BaseImage } from '../baseComponents'
+import axios from 'axios'
 const userLoggedState = {
   yes: 'user needs to be logged in',
   no: 'user does not need to be logged in',
@@ -51,7 +52,6 @@ export default {
   components: { BaseButton, BaseIcon, BaseImage },
   data() {
     return {
-      isUserLogged: false,
       drawer: false,
       routes: [
         { name: 'My Giweaways', icon: 'gift', needUserLogged: userLoggedState.yes, path: '/giveaway-list' },
@@ -76,11 +76,22 @@ export default {
       } else {
         return this.routes.filter(route => route.needUserLogged !== userLoggedState.yes)
       }
+    },
+    isUserLogged() {
+      return this.$store.state.user.name !== ''
     }
   },
   methods: {
     logOut() {
-      alert('Logging out!!!')
+      axios
+        .post(`${process.env.VUE_APP_API_BASE_URL}/api/v1.0/accounts/logout`, null, { withCredentials: true })
+        .then(response => {
+          this.$store.commit('Logout')
+          this.$router.push('/')
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }

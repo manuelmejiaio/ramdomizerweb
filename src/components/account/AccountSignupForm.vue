@@ -1,12 +1,17 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="white--text">
+    <v-row>
+      <v-col cols="12">
+        <BaseText class="display-2">Signup</BaseText>
+      </v-col>
+    </v-row>
     <v-row align="center" justify="center">
-      <v-col cols="12" md="3">
+      <v-col cols="12" md="4">
         <BaseCard>
           <v-container fluid>
             <v-row no-gutters align="start" justify="center">
               <v-col cols="12">
-                <BaseText v-for="error in serverErrors" :key="error" class="caption">{{ error }}</BaseText>
+                <BaseText v-for="error in serverErrors" :key="error" class="caption error--text">{{ error }}</BaseText>
               </v-col>
             </v-row>
             <v-row no-gutters align="start" justify="center">
@@ -31,7 +36,9 @@
                     :error-messages="passwordErrors"
                     @blur="$v.password.$touch()"
                   />
-                  <BaseButton block color="success" :loading="loading" @click="executeRecaptcha">Sign Up</BaseButton>
+                  <BaseButton block x-large color="success" :loading="loading" @click="executeRecaptcha"
+                    >Sign Up</BaseButton
+                  >
                   <VueRecaptcha
                     ref="recaptcha"
                     size="invisible"

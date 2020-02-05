@@ -2,7 +2,7 @@
   <v-container fluid class="white--text">
     <v-row>
       <v-col cols="12">
-        <BaseText class="display-2">Reset Password</BaseText>
+        <BaseText class="display-2">Change Password</BaseText>
       </v-col>
     </v-row>
     <v-row align="center" justify="center">
@@ -18,13 +18,21 @@
               <v-col cols="12">
                 <BaseForm>
                   <BaseTextField
-                    v-model="password"
-                    label="Email"
-                    :error-messages="passwordErrors"
-                    @blur="$v.password.$touch()"
+                    v-model="currentPassword"
+                    type="password"
+                    label="Current Password"
+                    :error-messages="currentPasswordErrors"
+                    @blur="$v.currentPassword.$touch()"
                   />
-                  <BaseButton block x-large color="success" :loading="loading" @click="resetPassword">
-                    Reset
+                  <BaseTextField
+                    v-model="newPassword"
+                    type="password"
+                    label="New Password"
+                    :error-messages="newPasswordErrors"
+                    @blur="$v.newPassword.$touch()"
+                  />
+                  <BaseButton block x-large color="success" :loading="loading" @click="changePassword">
+                    Save
                   </BaseButton>
                 </BaseForm>
               </v-col>
@@ -41,46 +49,55 @@ import { BaseCard, BaseText, BaseForm, BaseTextField, BaseButton } from '../base
 import { validationMixin } from 'vuelidate'
 import { required, minLength } from 'vuelidate/lib/validators'
 import axios from 'axios'
-const url = new URL(window.location.href)
-const searchParams = new URLSearchParams(url.search)
-const code = searchParams.get('code')
-const email = searchParams.get('email')
+import { authHeader } from '../../helpers/authHeader'
 export default {
-  name: 'AccountForgotPasswordForm',
+  name: 'AccountChangePasswordForm',
   components: { BaseCard, BaseText, BaseForm, BaseTextField, BaseButton },
   mixins: [validationMixin],
   validations: {
-    password: { required, minLength: minLength(6) }
+    currentPassword: { required },
+    newPassword: { required, minLength: minLength(6) }
   },
   data() {
     return {
-      password: '',
+      currentPassword: '',
+      newPassword: '',
       loading: false,
       serverErrors: ''
     }
   },
   computed: {
-    passwordErrors() {
+    currentPasswordErrors() {
       const errors = []
-      if (!this.$v.password.$dirty) return errors
-      !this.$v.password.required && errors.push('Password is required')
-      !this.$v.password.minLength &&
-        errors.push(`Password must have at least ${this.$v.name.$params.minLength.min} characters`)
+      if (!this.$v.currentPassword.$dirty) return errors
+      !this.$v.currentPassword.required && errors.push('Current password is required')
+      return errors
+    },
+    newPasswordErrors() {
+      const errors = []
+      if (!this.$v.newPassword.$dirty) return errors
+      !this.$v.newPassword.required && errors.push('New password is required')
+      !this.$v.newPassword.minLength &&
+        errors.push(`New password must have at least ${this.$v.newPassword.$params.minLength.min} characters`)
       return errors
     }
   },
   methods: {
-    resetPassword() {
+    changePassword() {
       this.$v.$touch()
       if (!this.$v.$invalid) {
         this.loading = true
         axios
-          .put(`${process.env.VUE_APP_API_BASE_URL}/api/v1.0/accounts/ResetPassword`, {
-            Email: email,
-            Password: this.password,
-            Code: code
-          })
+          .put(
+            `${process.env.VUE_APP_API_BASE_URL}/api/v1.0/accounts/changePassword`,
+            {
+              CurrentPassword: this.currentPassword,
+              NewPassword: this.newPassword
+            },
+            authHeader(this.$store.state.user.token)
+          )
           .then(response => {
+            this.$store.commit('Logout')
             this.$router.push('/account-change-password-confirmation')
           })
           .catch(error => {
