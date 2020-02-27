@@ -1,5 +1,5 @@
 <template>
-  <v-text-field v-bind="$attrs" outlined v-on="$listeners">
+  <v-textarea v-bind="$attrs" outlined v-on="$listeners">
     <!-- Pass on all named slots -->
     <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
 
@@ -7,11 +7,11 @@
     <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope"
       ><slot :name="slot" v-bind="scope"
     /></template>
-  </v-text-field>
+  </v-textarea>
 </template>
 
 <script>
 export default {
-  name: 'BaseTextField'
+  name: 'BaseTextarea'
 }
 </script>

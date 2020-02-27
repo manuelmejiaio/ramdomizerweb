@@ -20,6 +20,7 @@ const routes = [
   { path: '/contact', name: 'TheContact', component: () => import('@/views/TheContact.vue') },
   { path: '/examples', name: 'TheExamples', component: () => import('@/views/TheExamples.vue') },
   { path: '/giveaway-info', name: 'GiveawayInfo', component: () => import('@/views/GiveawayInfo.vue') },
+  { path: '/giveaway-setup', name: 'GiveawaySetup', component: () => import('@/views/GiveawaySetup.vue') },
   { path: '/giveaway-list', name: 'GiveawayList', component: () => import('@/views/GiveawayList.vue') },
   { path: '/giveaway-participants', name: 'GiveawayParticipants', component: () => import('@/views/GiveawayParticipants.vue')},
   { path: '/giveaway-thanks', name: 'GiveawayThanks', component: () => import('@/views/GiveawayThanks.vue') },
